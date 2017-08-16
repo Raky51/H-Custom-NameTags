@@ -16,9 +16,10 @@
 #include <a_samp>
 #include <callbacks>
 //-------------------------------------------------	
-new PlayerText3D:text;		
+new Text3D:text;		
 public OnFilterScriptInit()
 {
+	SetNameTagDrawDistance(0.0);
 	ShowNameTags(0);
 	print("\nH-Custom Nametags has been loaded successfully\n");
 	return 1;
@@ -29,30 +30,31 @@ public OnFilterScriptExit()
 }
 public OnPlayerConnect(playerid)
 {
-	new pName[24],Float:pHealth,Float:pArmour, string[60];
+	new pName[24],Float:pHealth,Float:pArmour, string[200];
 	GetPlayerName(playerid, pName, 24);
 	GetPlayerHealth(playerid, pHealth);
 	GetPlayerArmour(playerid, pArmour);
-	format(string, 60, "{00FF00}%s\n{0000FF}Health: %f\n{FF0000}Armour: %f\n{FF7F2A}Status: Active", pName, pHealth, pArmour);
-	text = CreatePlayer3DTextLabel(playerid, string, -1, 0.0, 0.0, 0.0, 15, playerid);
+	format(string, 200, "{00FF00}%s\n{0000FF}Health: %f\n{FF0000}Armour: %f\n{FF7F2A}Status: Active", pName, pHealth, pArmour);
+	text = Create3DTextLabel(string, 0xFFFFFFFF, 0, 0, 0, 15, 0, 1);
+	Attach3DTextLabelToPlayer(text, playerid, 0.0, 0.0, 0.2);
 	SetTimerEx("UpdateNameTag", 500, 1, "i", playerid);
 	return 1;
 }
 forward UpdateNameTag(playerid);
 public UpdateNameTag(playerid)
 {
-	new pName[24],Float:pHealth,Float:pArmour, string[60];
+	new pName[24],Float:pHealth,Float:pArmour, string[200];
 	GetPlayerName(playerid, pName, 24);
 	GetPlayerHealth(playerid, pHealth);
 	GetPlayerArmour(playerid, pArmour);
 	if(IsPlayerPaused(playerid))
 	{
-		format(string, 60, "{00FF00}%s\n{0000FF}Health: %f\n{FF0000}Armour: %f\n{FF7F2A}Status: AFK", pName, pHealth, pArmour);
+		format(string, 200, "{00FF00}%s\n{0000FF}Health: %f\n{FF0000}Armour: %f\n{FF7F2A}Status: AFK", pName, pHealth, pArmour);
 	}	
 	else
 	{
-		format(string, 60, "{00FF00}%s\n{0000FF}Health: %f\n{FF0000}Armour: %f\n{FF7F2A}Status: Active", pName, pHealth, pArmour);
+		format(string, 200, "{00FF00}%s\n{0000FF}Health: %f\n{FF0000}Armour: %f\n{FF7F2A}Status: Active", pName, pHealth, pArmour);
 	}
-	UpdatePlayer3DTextLabelText(playerid, text, -1, string);
+	Update3DTextLabelText(text, -1, string);
 	return 1;
 }
