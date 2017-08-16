@@ -1,58 +1,44 @@
-/*
-			-----------------------------------
-			H-Custom NameTags With AFK Status
-			-----------------------------------
-			Author: HoussemGaming
-			-----------------------------------
-			Credits:
-				- SA-MP - a_samp
-				- Emmet_ - Callbacks include
-				- HoussemGaming - IDK Why :D
-			-----------------------------------
-			You can edit it in any way
-			-----------------------------------
-*/		
-//-------------------------------------------------		
-#include <a_samp>
-#include <callbacks>
-//-------------------------------------------------	
-new Text3D:text;		
-public OnFilterScriptInit()
-{
-	SetNameTagDrawDistance(0.0);
-	ShowNameTags(0);
-	print("\nH-Custom Nametags has been loaded successfully\n");
-	return 1;
-}			
-public OnFilterScriptExit()
-{
-	return 1;
-}
-public OnPlayerConnect(playerid)
-{
-	new pName[24],Float:pHealth,Float:pArmour, string[200];
-	GetPlayerName(playerid, pName, 24);
-	GetPlayerHealth(playerid, pHealth);
-	GetPlayerArmour(playerid, pArmour);
-	format(string, 200, "{00FF00}%s\n{0000FF}Health: %0.2f\n{FF0000}Armour: %0.2f\n{FF7F2A}Status: Active", pName, pHealth, pArmour);
-	text = Create3DTextLabel(string, 0xFFFFFFFF, 0, 0, 0, 15, 0, 1);
-	Attach3DTextLabelToPlayer(text, playerid, 0.0, 0.0, 0.2);
-	return 1;
-}
-public OnPlayerUpdate(playerid)
-{
-	new pName[24],Float:pHealth,Float:pArmour, string[200];
-	GetPlayerName(playerid, pName, 24);
-	GetPlayerHealth(playerid, pHealth);
-	GetPlayerArmour(playerid, pArmour);
-	if(IsPlayerPaused(playerid))
-	{
-		format(string, 200, "{00FF00}%s\n{0000FF}Health: %0.2f\n{FF0000}Armour: %0.2f\n{FF7F2A}Status: AFK", pName, pHealth, pArmour);
-	}	
-	else
-	{
-		format(string, 200, "{00FF00}%s\n{0000FF}Health: %0.2f\n{FF0000}Armour: %0.2f\n{FF7F2A}Status: Active", pName, pHealth, pArmour);
-	}
-	Update3DTextLabelText(text, -1, string);
-	return 1;
-}
+#include <a_samp> 
+#include <callbacks> 
+
+#define MAX_SLOTS 100 
+
+// You can stop editing from here. 
+#undef MAX_PLAYERS 
+    #define MAX_PLAYERS MAX_SLOTS 
+
+new Text3D:text[MAX_PLAYERS]; 
+public OnFilterScriptInit() 
+{ 
+    SetNameTagDrawDistance(0.0); 
+    ShowNameTags(0); 
+    print("H-Custom Nametags has been loaded successfully\n"); 
+    return 1; 
+} 
+
+public OnPlayerSpawn(playerid) 
+{ 
+    new Float:health, Float:armour, name[24], string[125]; 
+    GetPlayerName(playerid, name, sizeof(name)); 
+    GetPlayerHealth(playerid, health); 
+    GetPlayerArmour(playerid, armour); 
+    format(string, sizeof(string), "{00FF00}%s\n{0000FF}Health: %f\n{FF0000}Armour: %f\n{FF7F2A}Status: Active", name, health, armour); 
+    text[playerid] = Create3DTextLabel(string, 0xFFFFFFFF, 0, 0, 0, 15, 0, 1); 
+    Attach3DTextLabelToPlayer(text[playerid], playerid, 0.0, 0.0, 0.2); 
+    return 1; 
+} 
+
+public OnPlayerUpdate(playerid) 
+{ 
+    new Float:health, Float:armour, name[24], string[125]; 
+
+    GetPlayerName(playerid, name, sizeof(name)); 
+    GetPlayerHealth(playerid, health); 
+    GetPlayerArmour(playerid, armour); 
+
+    if(IsPlayerPaused(playerid)) format(string, sizeof(string), "{00FF00}%s\n{0000FF}Health: %0.2f\n{FF0000}Armour: %0.2f\n{FF7F2A}Status: Away", name, health, armour); 
+    else format(string, sizeof(string), "{00FF00}%s\n{0000FF}Health: %0.2f\n{FF0000}Armour: %0.2f\n{FF7F2A}Status: Active", name, health, armour); 
+
+    Update3DTextLabelText(text[playerid], -1, string); 
+    return 1; 
+}  
