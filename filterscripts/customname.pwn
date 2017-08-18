@@ -37,7 +37,8 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
     GetPlayerName(playerid, name, sizeof(name));
     GetPlayerHealth(playerid, health);
     GetPlayerArmour(playerid, armour);
-    format(string, sizeof(string), "{00FF00}%s\n{0000FF}Health: %0.2f\n{FF0000}Armour: %0.2f\n{FF7F2A}Status: Active", name, health, armour);
+    if(IsPlayerPaused(playerid)) {format(string, sizeof(string), "{00FF00}%s\n{0000FF}Health: %0.2f\n{FF0000}Armour: %0.2f\n{FF7F2A}Status: AFK", name, health, armour);}
+    else {format(string, sizeof(string), "{00FF00}%s\n{0000FF}Health: %0.2f\n{FF0000}Armour: %0.2f\n{FF7F2A}Status: Active", name, health, armour);}
     Update3DTextLabelText(text[playerid], -1, string);
     return 1;
 }
