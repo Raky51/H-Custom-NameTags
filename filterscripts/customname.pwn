@@ -25,7 +25,7 @@ public OnPlayerSpawn(playerid)
     GetPlayerName(playerid, name, sizeof(name));
     GetPlayerHealth(playerid, health);
     GetPlayerArmour(playerid, armour);
-    format(string, sizeof(string), "{00FF00}%s\n{0000FF}Health: %f\n{FF0000}Armour: %f\n{FF7F2A}Status: Active", name, health, armour);
+    format(string, sizeof(string), "{00FF00}%s\n{0000FF}Health: 100.00\n{FF0000}Armour: %0.2f\n{FF7F2A}Status: Active", name, armour);
     text[playerid] = Create3DTextLabel(string, 0xFFFFFFFF, 0, 0, 0, 15, 0, 1);
     Attach3DTextLabelToPlayer(text[playerid], playerid, 0.0, 0.0, 0.2);
     return 1;
